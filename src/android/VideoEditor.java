@@ -630,4 +630,148 @@ public class VideoEditor extends CordovaPlugin {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
+
+     /**
+         * cropVideo
+         *
+         * Transcodes a video
+         *
+         * ARGUMENTS
+         * =========
+         *
+         * fileUri              - path to input video
+         * outputFileName       - output file name
+         * saveToLibrary        - save to gallery
+         * deleteInputFile      - optionally remove input file
+         * width                - width for the output video
+         * height               - height for the output video
+         * fps                  - fps the video
+         * videoBitrate         - video bitrate for the output video in bits
+         * duration             - max video duration (in seconds?)
+         *
+         * RESPONSE
+         * ========
+         *
+         * outputFilePath - path to output file
+         *
+         * @param JSONArray args
+         * @return void
+         */
+        private void cropVideo(JSONArray args) throws JSONException, IOException {
+            Log.d(TAG, "cropVideo firing");
+
+            JSONObject options = args.optJSONObject(0);
+            Log.d(TAG, "options: " + options.toString());
+
+            final File inFile = this.resolveLocalFileSystemURI("file://" + options.getString("fileUri"));
+            if (!inFile.exists()) {
+                Log.d(TAG, "input file does not exist");
+                callback.error("input video does not exist.");
+                return;
+            }
+
+            final String videoSrcPath = inFile.getAbsolutePath();
+            final String outputFileName = options.optString(
+                    "outputFileName",
+                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date())
+            );
+
+            final boolean deleteInputFile = options.optBoolean("deleteInputFile", false);
+            final int width = options.optInt("width", 0);
+            final int height = options.optInt("height", 0);
+            final int startX = options.optInt("startX", 0);
+            final int startY = options.optInt("startY", 0);
+            final int fps = options.optInt("fps", 24);
+            final int videoBitrate = options.optInt("videoBitrate", 1000000); // default to 1 megabit
+            final long videoDuration = options.optLong("duration", 0) * 1000 * 1000;
+
+            Log.d(TAG, "videoSrcPath: " + videoSrcPath);
+
+            final String outputExtension = ".mp4";
+
+            final Context appContext = cordova.getActivity().getApplicationContext();
+            final PackageManager pm = appContext.getPackageManager();
+
+            ApplicationInfo ai;
+            try {
+                ai = pm.getApplicationInfo(cordova.getActivity().getPackageName(), 0);
+            } catch (final NameNotFoundException e) {
+                ai = null;
+            }
+            final String appName = (String) (ai != null ? pm.getApplicationLabel(ai) : "Unknown");
+
+            final boolean saveToLibrary = options.optBoolean("saveToLibrary", false);
+            File mediaStorageDir;
+
+            if (saveToLibrary) {
+                mediaStorageDir = new File(
+                        Environment.getExternalStorageDirectory() + "/Movies",
+                        appName
+                );
+            } else {
+                mediaStorageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + cordova.getActivity().getPackageName() + "/files/files/videos");
+            }
+
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    callback.error("Can't access or make Movies directory");
+                    return;
+                }
+            }
+
+            final String outputFilePath = new File(
+                    mediaStorageDir.getPath(),
+                    outputFileName
+            ).getAbsolutePath();
+
+            Log.d(TAG, "outputFilePath: " + outputFilePath);
+
+            FFmpegMediaMetadataRetriever mFFmpegMediaMetadataRetriever = new FFmpegMediaMetadataRetriever();
+            mFFmpegMediaMetadataRetriever .setDataSource(videoSrcPath);
+            String mVideoDuration =  mFFmpegMediaMetadataRetriever .extractMetadata(FFmpegMediaMetadataRetriever .METADATA_KEY_DURATION);
+            mFFmpegMediaMetadataRetriever .release();
+            long mTimeInMilliseconds= Long.parseLong(mVideoDuration);
+
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+
+                    FFmpeg ffmpeg = FFmpeg.getInstance(appContext);
+    //                String[] complexCommand = {"-i", videoSrcPath, "-filter:v", "crop=" + 720 + ":" + 720 + ":" + startX + ":" + startY, "-c:a", "copy", "-max_muxing_queue_size", "4000", outputFilePath};
+                    String[] complexCommand = {"-y", "-i", videoSrcPath, "-filter:v", "crop=" + width + ":" + height + ":" + startX + ":" + startY, "-preset", "ultrafast", "-strict", "-2", "-c:v", "libx264", "-c:a", "copy", "-max_muxing_queue_size", "4000", outputFilePath};
+                    try {
+                        ffmpeg.execute(complexCommand, new ExecuteBinaryResponseHandler() {
+                            @Override
+                            public void onStart() {
+
+                            }
+
+                            @Override
+                            public void onSuccess(String message) {
+                                Log.d(TAG, "success -  " + message);
+                                callback.success(outputFilePath + "@duration=" + mTimeInMilliseconds);
+                            }
+
+                            @Override
+                            public void onProgress(String message) {
+                                Log.d(TAG, "progress -  " + message);
+
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                callback.error(message);
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                super.onFinish();
+                            }
+                        });
+                    } catch (Throwable e) {
+                        Log.e("ffmpeg", "ffmpeg already running");
+                    }
+
+                }
+            });
+        }
 }
