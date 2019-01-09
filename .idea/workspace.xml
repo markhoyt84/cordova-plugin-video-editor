@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f119910f-23a4-4cee-975a-41b9211a99cb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/android/VideoEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/android/VideoEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/src/android/build.gradle" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -34,7 +34,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VideoEditor.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VideoEditor.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/VideoEditor.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="540">
@@ -42,6 +42,15 @@
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/android/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="46" lean-forward="true" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -55,6 +64,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/android/VideoEditor.java" />
+        <option value="$PROJECT_DIR$/src/android/build.gradle" />
       </list>
     </option>
   </component>
@@ -66,8 +76,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="y" value="23" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="525" />
+    <option name="y" value="34" />
     <option name="width" value="2560" />
     <option name="height" value="1337" />
   </component>
@@ -88,6 +99,12 @@
               <item name="cordova-plugin-video-editor" type="b2602c69:ProjectViewProjectNode" />
               <item name="cordova-plugin-video-editor" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cordova-plugin-video-editor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cordova-plugin-video-editor" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="cordova-plugin-video-editor" type="b2602c69:ProjectViewProjectNode" />
@@ -135,15 +152,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1547051614733</updated>
-      <workItem from="1547051616251" duration="319000" />
+      <workItem from="1547051616251" duration="855000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="319000" />
+    <option name="totallyTimeSpent" value="855000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="2560" height="1337" extended-state="1" />
+    <frame x="0" y="23" width="2560" height="1337" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TypeScript" />
@@ -195,6 +212,13 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="46" lean-forward="true" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
         </state>
       </provider>
     </entry>
