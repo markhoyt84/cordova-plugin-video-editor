@@ -7,6 +7,7 @@ repositories{
 dependencies {
     compile 'com.github.ergovia-mobile:android-transcoder:v0.1.10R_ergovia'
     compile 'nl.bravobit:android-ffmpeg:1.1.5'
+    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
 }
 
 android {
